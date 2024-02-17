@@ -1,31 +1,45 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 // components
 import Form from '@components/Form';
 
-const CreatePrompt = () => {
+const EditPrompt = () => {
   const router = useRouter();
-  const { data: session } = useSession();
-
+  const searchParams = useSearchParams();
+  const promptId = searchParams.get('id');
   const [isSubmitting, setisSubmitting] = useState(false);
   const [post, setPost] = useState({
     prompt: '',
     tag: '',
   });
 
-  const createPrompt = async (e) => {
+  useEffect(() => {
+    const getPromptDetails = async () => {
+      const response = await fetch(`/api/prompt/${promptId}`);
+      const data = await response.json();
+
+      setPost({
+        prompt: data.prompt,
+        tag: data.tag,
+      });
+    };
+    if (promptId) getPromptDetails();
+  }, [promptId]);
+
+  const updatePrompt = async (e) => {
     e.preventDefault();
     setisSubmitting(true);
 
+    if (!promptId) alert('Prompt ID not found!');
+
     try {
-      const response = await fetch('/api/prompt/new', {
-        method: 'POST',
+      const response = await fetch(`/api/prompt/${promptId}`, {
+        method: 'PATCH',
         body: JSON.stringify({
           prompt: post.prompt,
-          userId: session?.user.id,
           tag: post.tag,
         }),
       });
@@ -34,6 +48,7 @@ const CreatePrompt = () => {
         router.push('/');
       }
     } catch (error) {
+      console.log('usao ');
       console.log('Error creating prompt', error);
     } finally {
       setisSubmitting(false);
@@ -42,15 +57,15 @@ const CreatePrompt = () => {
 
   return (
     <Form
-      type="Create"
+      type="Edit"
       post={post}
       setPost={setPost}
-      handleSubmit={createPrompt}
+      handleSubmit={updatePrompt}
       isSubmitting={isSubmitting}
     />
   );
 };
 
-export default CreatePrompt;
+export default EditPrompt;
 
 // You are a professional web developer. I'm going to give you a snippet of code and you can give me some advice on how to make it cleaner, more readable and more efficient
