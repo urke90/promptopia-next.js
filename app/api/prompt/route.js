@@ -13,6 +13,6 @@ export const GET = async () => {
 
     return new Response(JSON.stringify(prompts), { status: 200 });
   } catch (error) {
-    return new Response('Faild to fethc all prompts', { status: 200 });
+    return new Response('Faild to fethc all prompts', { status: 500 });
   }
 };
