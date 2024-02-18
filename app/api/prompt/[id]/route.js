@@ -1,7 +1,3 @@
-/**
- * We need 3 routes GET PATCH and DELETE
- */
-
 // utils
 import { connectToDB } from '@utils/database';
 // models

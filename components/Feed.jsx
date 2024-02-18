@@ -1,7 +1,7 @@
 'use client';
 
 // react
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // component
 import PromptCard from './PromptCard';
 
@@ -20,8 +20,34 @@ const PromptCardList = ({ data, handleTagClick }) => {
 const Feed = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [posts, setPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
 
-  const handleSearchQueryChange = (e) => {};
+  const debounceTimeoutRef = useRef(null);
+
+  const handleSearchQueryChange = (e) => {
+    clearTimeout(debounceTimeoutRef);
+    setSearchQuery(e.target.value);
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      const searchedPrompts = filterPrompts(e.target.value);
+      setFilteredPosts(searchedPrompts);
+    }, 500);
+  };
+
+  const filterPrompts = (searchText) => {
+    const regex = new RegExp(searchText, 'i');
+
+    return posts.filter(
+      (post) => regex.test(post.prompt.userName) || regex.test(post.prompt) || regex.test(post.tag)
+    );
+  };
+
+  const handleTagClick = (tag) => {
+    setSearchQuery(tag);
+
+    const searchedPrompts = filterPrompts(tag);
+    setFilteredPosts(searchedPrompts);
+  };
 
   useEffect(() => {
     const fetchPrompts = async () => {
@@ -36,9 +62,9 @@ const Feed = () => {
 
   return (
     <section className="feed">
-      <form action="" className="relative w-full flex-center">
+      <form className="relative w-full flex-center">
         <input
-          type="text "
+          type="text"
           placeholder="Search for a tag or a username"
           value={searchQuery}
           onChange={handleSearchQueryChange}
@@ -46,7 +72,11 @@ const Feed = () => {
           className="search_input peer"
         />
       </form>
-      <PromptCardList data={posts} handleTagClick={() => {}} />
+      {searchQuery ? (
+        <PromptCardList data={filteredPosts} handleTagClick={handleTagClick} />
+      ) : (
+        <PromptCardList data={posts} handleTagClick={handleTagClick} />
+      )}
     </section>
   );
 };
