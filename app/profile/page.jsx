@@ -22,10 +22,9 @@ const MyProfile = () => {
 
     if (hasConfirmed) {
       try {
-        const response = await fetch(`/api/prompt/${post._id}`, {
+        await fetch(`/api/prompt/${post._id}`, {
           method: 'DELETE',
         });
-        console.log('response', response);
 
         setPosts((prevPosts) => prevPosts.filter((p) => p._id !== post._id));
       } catch (error) {
