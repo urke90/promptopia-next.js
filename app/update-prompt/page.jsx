@@ -48,7 +48,6 @@ const EditPrompt = () => {
         router.push('/');
       }
     } catch (error) {
-      console.log('usao ');
       console.log('Error creating prompt', error);
     } finally {
       setIsSubmitting(false);
