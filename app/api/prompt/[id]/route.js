@@ -34,7 +34,6 @@ export const PATCH = async (req, { params }) => {
 
     return new Response(JSON.stringify(existingPromt), { status: 200 });
   } catch (error) {
-    console.log('errorrrrrrrrrrrrrrrrrrrrrrrr', error);
     return new Response('Faild to update the prompt', { status: 500 });
   }
 };

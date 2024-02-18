@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 // components
 import Form from '@components/Form';
+
+// ----------------------------------------------------------------
 
 const EditPrompt = () => {
   const router = useRouter();
@@ -48,7 +49,6 @@ const EditPrompt = () => {
         router.push('/');
       }
     } catch (error) {
-      console.log('usao ');
       console.log('Error creating prompt', error);
     } finally {
       setIsSubmitting(false);
