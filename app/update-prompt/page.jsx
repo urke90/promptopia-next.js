@@ -10,7 +10,7 @@ const EditPrompt = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const promptId = searchParams.get('id');
-  const [isSubmitting, setisSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [post, setPost] = useState({
     prompt: '',
     tag: '',
@@ -31,7 +31,7 @@ const EditPrompt = () => {
 
   const updatePrompt = async (e) => {
     e.preventDefault();
-    setisSubmitting(true);
+    setIsSubmitting(true);
 
     if (!promptId) alert('Prompt ID not found!');
 
@@ -51,7 +51,7 @@ const EditPrompt = () => {
       console.log('usao ');
       console.log('Error creating prompt', error);
     } finally {
-      setisSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
